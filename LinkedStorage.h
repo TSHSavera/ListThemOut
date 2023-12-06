@@ -1,25 +1,24 @@
-#pragma once
-class LinkedStorage
-{
-
+class Node {
 public:
+	string name, desc;
+	int time;
+	Node* next = NULL;
+	Node* prev = NULL;
 
-	LinkedStorage() = default;
-	string hatdog() {
-		string Stringss = "hahahaha";
-		return Stringss;
+	//Constructor
+	Node(string name, string desc, int time) {
+		this->name = name;
+		this->desc = desc;
+		this->time = time;
 	}
 
-	try {
-		cin << hatdog;
-		//Anong gagawin
-	}
-	catch (e) {
-		cout << "Erorr saving file");
-	}
+};
 
-	do {
-		//Anong ggawin
-	} while (true);
+class LinkedStorage {
+public:
+	Node* head = NULL;
+	Node* tail = NULL;
+
+	//Functions
 };
 
