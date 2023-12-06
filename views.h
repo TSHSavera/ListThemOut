@@ -1,3 +1,5 @@
+//DITO DAPAT YUNG MGA CIN AT COUT NYO
+
 #pragma once
 #include <conio.h>
 #include <stdio.h>
@@ -57,9 +59,11 @@ public:
 
     }
 
+    //SAMPLE LANG TO
     void DisplayTasks() {
         cout << "Your tasks";
         system("pause");
     }
+
 };
 

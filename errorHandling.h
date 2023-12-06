@@ -1,3 +1,4 @@
+//ERROR HANDLING PARA SA MGA TANGANG NAGEENTER NG NUMBERS SA TEXT INPUT
 #pragma once
 #include <iostream>
 
