@@ -34,8 +34,11 @@
 #Visual Studio Files
 ListThemOut/.vs
 *.db
-.vs/ListThemOut/v17/ipch/AutoPCH/d081a5c51c801af9/LISTTHEMOUT.ipch
-.vs/ListThemOut/v17/Browse.VC.opendb
-.vs/ListThemOut/v17/Browse.VC.db-wal
-.vs/ListThemOut/v17/Browse.VC.db-shm
-.vs/ListThemOut/FileContentIndex/ae268689-4cc6-46b0-9b60-2889a9a9c190.vsidx
+.vs/
+x64/
+*.filters
+*.vcxproj
+*.user
+*.sln
+ListThemOut.vcxproj
+ListThemOut.vcxproj.filters
