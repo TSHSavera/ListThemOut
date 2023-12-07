@@ -1,14 +1,16 @@
 //BAWAL MAG COUT OR CIN SA CLASS NA TO
+#include <string>
 
 class Node {
 public:
-	string name, desc;
+	std::string name;
+	std::string desc;
 	int time;
 	Node* next = NULL;
 	Node* prev = NULL;
 
 	//Constructor
-	Node(string name, string desc, int time) {
+	Node(std::string name, std::string desc, int time) {
 		this->name = name;
 		this->desc = desc;
 		this->time = time;
@@ -23,7 +25,7 @@ public:
 
 	//Functions
 	//Add data
-	void addNode(string name, string desc, int time) {
+	void addNode(std::string name, std::string desc, int time) {
 		Node* newNode = new Node(name, desc, time);
 		if (head == NULL) {
 			head = newNode;
@@ -37,7 +39,7 @@ public:
 	}
 
 	//Delete data
-	void deleteNode(string name) {
+	void deleteNode(std::string name) {
 		Node* temp = head;
 		while (temp != NULL) {
 			if (temp->name == name) {
@@ -65,7 +67,7 @@ public:
 	}
 
 	//Search Data
-	Node* searchData(string name) {
+	Node* searchData(std::string name) {
 		Node* temp = head;
 		while (temp != NULL) {
 			if (temp->name == name) {
@@ -84,7 +86,7 @@ public:
 	}
 
 	//Update data
-	void updateData(char type, string desc) {
+	void updateData(char type, std::string desc) {
 		Node* temp = head;
 		switch (type) {
 			case '1':
