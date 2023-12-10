@@ -30,7 +30,7 @@ public:
 
 };
 
-static class timeConverter {
+class timeConverter {
 public:
 
 	//Functions
@@ -116,6 +116,20 @@ public:
 						newNode->prev = temp->prev;
 						temp->prev->next = newNode;
 						temp->prev = newNode;
+						break;
+					}
+					//If the time of the new node is equal to the time of the node being compared, it will be added after the node being compared
+					else if (newNode->time == temp->time) {
+						newNode->next = temp->next;
+						newNode->prev = temp;
+						if (temp->next == NULL) {
+							temp->next = newNode;
+							tail = newNode;
+						}
+						else {
+							temp->next->prev = newNode;
+							temp->next = newNode;
+						}
 						break;
 					}
 					temp = temp->next;
@@ -280,13 +294,12 @@ public:
 	//Update data for time
 	void updateData(std::string tname,char type, int time) {
 		Node* temp = searchData(tname);
-		std::cout << temp -> name;
+		Node* nextTemp = temp->next;
 		switch (type) {
-			case '3':
+		case '3':
 			temp->time = time;
 			break;
 		}
-		system("pause");
 	}
 
 };

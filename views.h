@@ -80,55 +80,151 @@ public:
     }
 
     void DisplayTasks() {
-        //Clear screen
-        system("cls");
-        //Ask what method of display they want
-        cout << "How would you like to view your tasks?" << endl
-            << "1. View all tasks" << endl
-            << "2. View tasks by deadline" << endl
-            << "3. Cancel" << endl << endl;
-        //Switch
-        char option = _getch();
-        switch (option) {
-        case '1':
-            //View all tasks
-            TaskStorage->getAllData();
-            break;
-        case '2':
-            //View tasks by deadline
-            //Enter the time range of deadline
-            int timeRange;
-            do {
-                cout << "Enter the time to show the tasks prior (24-Hour Format w/o colon e.g 800 for 8:00 AM): ";
-                string tempInput;
-                getline(cin, tempInput);
-                try {
-                    timeRange = stoi(tempInput);
-                }
-                catch (exception e) {
-                    timeRange = -1;
-                }
+        char option;
+        do {
+            //Clear screen
+            system("cls");
+            //Ask what method of display they want
+            cout << "How would you like to view your tasks?" << endl
+                << "1. View all tasks" << endl
+                << "2. View tasks by deadline" << endl
+                << "3. Cancel" << endl << endl
+                << "Choose an option: ";
+            //Switch
+            option = _getch();
+            switch (option) {
+            case '1':
+                //View all tasks
+                TaskStorage->getAllData();
+                break;
+            case '2':
+                //View tasks by deadline
+                //Enter the time range of deadline
+                int timeRange;
+                do {
+                    cout << "Enter task deadline (24-Hour Format w/o colon e.g 800 for 8:00 AM): ";
+                    string tempInput;
+                    getline(cin, tempInput);
+                    //Test the minutes if valid
+                    //Check the length of the input
+                    if (tempInput.length() == 3) {
+                        //Get the 3rd and 4th character
+                        string tempMinutes = tempInput.substr(1, 2);
+                        //Convert to int
+                        int minutes;
+                        try {
+                            minutes = stoi(tempMinutes);
+                        }
+                        catch (exception e) {
+                            cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                            timeRange = -1;
+                            system("pause");
+                            continue;
+                        }
+                        if (minutes > 59) {
+                            cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                            timeRange = -1;
+                            system("pause");
+                            continue;
+                        }
+                        else {
+                            try {
+                                timeRange = stoi(tempInput);
+                                //Test if the deadline is valid
+                                if (timeRange < 0 || timeRange > 2400) {
+                                    cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                                    timeRange = -1;
+                                    system("pause");
+                                }
+                                else {
+                                    break;
+                                }
+                            }
+                            catch (exception e) {
+                                timeRange = -1;
+                            }
+                        }
+                    }
+                    else if (tempInput.length() < 3) {
+                        int minutes = stoi(tempInput);
+                        if (minutes > 59) {
+                            cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                            timeRange = -1;
+                            system("pause");
+                            continue;
+                        }
+                        else {
+                            try {
+                                timeRange = stoi(tempInput);
+                                //Test if the deadline is valid
+                                if (timeRange < 0 || timeRange > 2400) {
+                                    cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                                    timeRange = -1;
+                                    system("pause");
+                                }
+                                else {
+                                    break;
+                                }
+                            }
+                            catch (exception e) {
+                                timeRange = -1;
+                            }
+                        }
+                    }
+                    else {
+                        //Get the 3rd and 4th character
+                        string tempMinutes = tempInput.substr(2, 2);
+                        //Convert to int
+                        int minutes;
+                        try {
+                            minutes = stoi(tempMinutes);
+                        }
+                        catch (exception e) {
+                            cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                            timeRange = -1;
+                            system("pause");
+                            continue;
+                        }
+                        if (minutes > 59) {
+                            cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                            timeRange = -1;
+                            system("pause");
+                            continue;
+                        }
+                        else {
+                            try {
+                                timeRange = stoi(tempInput);
+                                //Test if the deadline is valid
+                                if (timeRange < 0 || timeRange > 2400) {
+                                    cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                                    timeRange = -1;
+                                    system("pause");
+                                }
+                                else {
+                                    break;
+                                }
+                            }
+                            catch (exception e) {
+                                timeRange = -1;
+                            }
+                        }
+                    }
 
-                if (timeRange < 0) {
-                    cout << "Invalid time range! Please enter a valid time range!" << endl;
-                    system("pause");
-                }
-            } while (timeRange < 0 || timeRange > 2400);
-            //View tasks
-            TaskStorage->getAllData(timeRange);
-            cout << "End of tasks" << endl;
-            break;
-        case '3':
-        break;
-        default:
-			//Unknown value
-			cout << endl << "Unknown value! Choose from 1-3 only!" << endl;
-			system("pause");
-			cout << endl;
-			break;
-        }
-            
-        system("pause");
+                } while (true);
+                //View tasks
+                TaskStorage->getAllData(timeRange);
+                cout << "<--- No more tasks --->" << endl;
+                break;
+            case '3':
+                return;
+            default:
+                //Unknown value
+                cout << endl << "Unknown value! Choose from 1-3 only!" << endl;
+                cout << endl;
+                break;
+            }
+            system("pause");
+        } while (option != 3);
     }
 
     void AddNewTask() {
@@ -167,17 +263,111 @@ public:
             cout << "Enter task deadline (24-Hour Format w/o colon e.g 800 for 8:00 AM): ";
 			string tempInput;
             getline(cin, tempInput);
-            try {
-                taskDeadline = stoi(tempInput);
-			}
-			catch (exception e) {
-				taskDeadline = -1;
+            //Test the minutes if valid
+            //Check the length of the input
+            if (tempInput.length() == 3) {
+                //Get the 3rd and 4th character
+                string tempMinutes = tempInput.substr(1, 2);
+                //Convert to int
+                int minutes;
+                try {
+                    minutes = stoi(tempMinutes);
+                }
+                catch (exception e) {
+                    cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                    taskDeadline = -1;
+                    system("pause");
+                    continue;
+                }
+                if (minutes > 59) {
+                    cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                    taskDeadline = -1;
+                    system("pause");
+                    continue;
+                }
+                else {
+                    try {
+                        taskDeadline = stoi(tempInput);
+                        //Test if the deadline is valid
+                        if (taskDeadline < 0 || taskDeadline > 2400) {
+							cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+							taskDeadline = -1;
+							system("pause");
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    catch (exception e) {
+                        taskDeadline = -1;
+                    }
+                }
             }
-
-			if (taskDeadline < 0 || taskDeadline > 2400) {
-				cout << "Invalid deadline! Please enter a valid deadline!" << endl;
-				system("pause");
-			}
+            else if (tempInput.length() < 3) {
+                int minutes = stoi(tempInput);
+                if(minutes > 59) {
+					cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+					taskDeadline = -1;
+					system("pause");
+					continue;
+				}
+				else {
+					try {
+						taskDeadline = stoi(tempInput);
+						//Test if the deadline is valid
+						if (taskDeadline < 0 || taskDeadline > 2400) {
+							cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+							taskDeadline = -1;
+							system("pause");
+						}
+						else {
+							break;
+						}
+					}
+					catch (exception e) {
+						taskDeadline = -1;
+					}
+				}
+            }
+            else {
+                //Get the 3rd and 4th character
+                string tempMinutes = tempInput.substr(2, 2);
+                //Convert to int
+                int minutes;
+                try {
+                    minutes = stoi(tempMinutes);
+                }
+                catch (exception e) {
+                    cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                    taskDeadline = -1;
+                    system("pause");
+                    continue;
+                }
+                if (minutes > 59) {
+                    cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                    taskDeadline = -1;
+                    system("pause");
+                    continue;
+                }
+                else {
+                    try {
+                        taskDeadline = stoi(tempInput);
+                        //Test if the deadline is valid
+                        if (taskDeadline < 0 || taskDeadline > 2400) {
+                            cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                            taskDeadline = -1;
+                            system("pause");
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    catch (exception e) {
+                        taskDeadline = -1;
+                    }
+                }
+            }
+            
 		} while (taskDeadline < 0 || taskDeadline > 2400);
 
 		//Add the task to the linked list
@@ -233,7 +423,6 @@ public:
             //Ask what task to update
             cout << endl << "Enter task name to update (enter 0 to cancel): ";
             getline(cin, taskNameU);
-            cout << endl << taskNameU;
             //Lookup the task
             searchDataResult = TaskStorage->searchData(taskNameU) != NULL;
             if (taskNameU == "0") {
@@ -287,22 +476,117 @@ public:
                 //Enter task deadline
                 do {
                     cout << endl << "Enter task deadline (24-Hour Format w/o colon e.g 800 for 8:00 AM): ";
-                    cin >> taskDeadline;
-                    //Error handling
-                    while (cin.fail()) {
-                        //Set taskDeadline to -1 to trigger the while loop
-                        taskDeadline = -1;
-                        clearInvalid();
+                    string tempInput;
+                    getline(cin, tempInput);
+                    //Test the minutes if valid
+                    //Check the length of the input
+                    if (tempInput.length() == 3) {
+                        //Get the 3rd and 4th character
+                        string tempMinutes = tempInput.substr(1, 2);
+                        //Convert to int
+                        int minutes;
+                        try {
+                            minutes = stoi(tempMinutes);
+                        }
+                        catch (exception e) {
+                            cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+							taskDeadline = -1;
+							system("pause");
+							continue;
+                        }
+                        if (minutes > 59) {
+                            cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                            taskDeadline = -1;
+                            system("pause");
+                            continue;
+                        }
+                        else {
+                            try {
+                                taskDeadline = stoi(tempInput);
+                                //Test if the deadline is valid
+                                if (taskDeadline < 0 || taskDeadline > 2400) {
+                                    cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                                    taskDeadline = -1;
+                                    system("pause");
+                                }
+                                else {
+                                    break;
+                                }
+                            }
+                            catch (exception e) {
+                                taskDeadline = -1;
+                            }
+                        }
                     }
-
-                    if (taskDeadline < 0 || taskDeadline > 2400) {
-                        cout << "Invalid deadline! Please enter a valid deadline!" << endl;
-                        system("pause");
+                    else if (tempInput.length() < 3) {
+                        int minutes = stoi(tempInput);
+                        if (minutes > 59) {
+                            cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                            taskDeadline = -1;
+                            system("pause");
+                            continue;
+                        }
+                        else {
+                            try {
+                                taskDeadline = stoi(tempInput);
+                                //Test if the deadline is valid
+                                if (taskDeadline < 0 || taskDeadline > 2400) {
+                                    cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                                    taskDeadline = -1;
+                                    system("pause");
+                                }
+                                else {
+                                    break;
+                                }
+                            }
+                            catch (exception e) {
+                                taskDeadline = -1;
+                            }
+                        }
+                    }
+                    else {
+                        //Get the 3rd and 4th character
+                        string tempMinutes = tempInput.substr(2, 2);
+                        //Convert to int
+                        int minutes;
+                        try {
+                            minutes = stoi(tempMinutes);
+                        }
+                        catch (exception e) {
+                            cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                            taskDeadline = -1;
+                            system("pause");
+                            continue;
+                        }
+                        if (minutes > 59) {
+                            cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                            taskDeadline = -1;
+                            system("pause");
+                            continue;
+                        }
+                        else {
+                            try {
+                                taskDeadline = stoi(tempInput);
+                                //Test if the deadline is valid
+                                if (taskDeadline < 0 || taskDeadline > 2400) {
+                                    cout << "Invalid deadline! Please enter a valid deadline!" << endl;
+                                    taskDeadline = -1;
+                                    system("pause");
+                                }
+                                else {
+                                    break;
+                                }
+                            }
+                            catch (exception e) {
+                                taskDeadline = -1;
+                            }
+                        }
                     }
                 } while (taskDeadline < 0 || taskDeadline > 2400);
                 //Update the task
                 TaskStorage->updateData(taskNameU, '3', taskDeadline);
                 cout << "Task updated successfully!" << endl;
+                system("pause");
 				break;
             case '4':
                 break;
