@@ -37,7 +37,7 @@ public:
 	std::string TwelveHourFormat(int time) {
 		std::string convertedTime;
 		std::string tempMinute;
-		if (time < 1200) {
+		if (time < 1200 && time > 59) {
 			if (time % 100 <= 9) {
 				tempMinute = "0";
 				tempMinute += toString(time % 100);
@@ -48,6 +48,20 @@ public:
 			convertedTime = toString(time / 100);
 			convertedTime += ":";
 			convertedTime += tempMinute;
+			convertedTime += " AM";
+			return convertedTime;
+		}
+		else if (time <= 59 && time >= 10) {
+			convertedTime = "12";
+			convertedTime += ":";
+			convertedTime += toString(time);
+			convertedTime += " AM";
+			return convertedTime;
+		}
+		else if (time >= 0 && time <= 9) {
+			convertedTime = "12";
+			convertedTime += ":0";
+			convertedTime += toString(time);
 			convertedTime += " AM";
 			return convertedTime;
 		}
@@ -191,6 +205,9 @@ public:
 					//rebuild time with colon
 					time.insert(2, ":");
 				}
+				else if (time == "0") {
+					time = "00:00";
+				}
 				else {
 					time.insert(2, ":");
 				}
@@ -207,6 +224,42 @@ public:
 			temp = temp->next;
 		}
 
+	}
+
+	void getAllData(int timeRange) {
+	//Get all data base on the time - get all time earlier to the parameter
+		Node* temp = head;
+		if (temp == NULL) {
+			std::cout << "There's no data to display" << std::endl;
+			return;
+		}
+		while (temp != NULL) {
+			//Convert time to 24 hour format from military time
+			std::string time = toString(temp->time);
+			if (is24HourFormat) {
+				if (time.length() == 3) {
+					time.insert(0, "0");
+					//rebuild time with colon
+					time.insert(2, ":");
+				}
+				else if (time == "0") {
+					time = "00:00";
+				}
+				else {
+					time.insert(2, ":");
+				}
+			}
+			else {
+				time = tc.TwelveHourFormat(temp->time);
+			}
+			if (temp->time <= timeRange) {
+				std::cout << std::endl <<
+					"Task Name: " << temp->name << std::endl <<
+					"Task Description:" << std::endl << temp->desc <<
+					std::endl << "Task Deadline: " << time << std::endl;
+			}
+			temp = temp->next;
+		}
 	}
 
 	//Update data

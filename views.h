@@ -82,8 +82,52 @@ public:
     void DisplayTasks() {
         //Clear screen
         system("cls");
-        cout << "Your tasks" << endl;
-        TaskStorage->getAllData();
+        //Ask what method of display they want
+        cout << "How would you like to view your tasks?" << endl
+            << "1. View all tasks" << endl
+            << "2. View tasks by deadline" << endl
+            << "3. Cancel" << endl << endl;
+        //Switch
+        char option = _getch();
+        switch (option) {
+        case '1':
+            //View all tasks
+            TaskStorage->getAllData();
+            break;
+        case '2':
+            //View tasks by deadline
+            //Enter the time range of deadline
+            int timeRange;
+            do {
+                cout << "Enter the time to show the tasks prior (24-Hour Format w/o colon e.g 800 for 8:00 AM): ";
+                string tempInput;
+                getline(cin, tempInput);
+                try {
+                    timeRange = stoi(tempInput);
+                }
+                catch (exception e) {
+                    timeRange = -1;
+                }
+
+                if (timeRange < 0) {
+                    cout << "Invalid time range! Please enter a valid time range!" << endl;
+                    system("pause");
+                }
+            } while (timeRange < 0 || timeRange > 2400);
+            //View tasks
+            TaskStorage->getAllData(timeRange);
+            cout << "End of tasks" << endl;
+            break;
+        case '3':
+        break;
+        default:
+			//Unknown value
+			cout << endl << "Unknown value! Choose from 1-3 only!" << endl;
+			system("pause");
+			cout << endl;
+			break;
+        }
+            
         system("pause");
     }
 
