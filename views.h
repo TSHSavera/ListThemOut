@@ -416,7 +416,7 @@ public:
         //Print all tasks
         TaskStorage->getAllData();
         //Ask user the details of their task
-        string taskNameU, taskDescription;
+        string taskNameU, taskDescription, taskNameC;
         int taskDeadline;
         bool searchDataResult = false;
         do {
@@ -453,16 +453,17 @@ public:
                 //Change task name
                 do {
                     cout << endl << "Enter new task name: ";
-                    getline(cin, taskNameU);
-                    if (!std::regex_match(taskNameU, regex("[a-zA-Z0-9 ]+"))) {
+                    getline(cin, taskNameC);
+                    if (!std::regex_match(taskNameC, regex("[a-zA-Z0-9 ]+"))) {
                         cout << "Invalid task name! Please enter a valid task name!" << endl;
                         system("pause");
                         system("cls");
                     }
                 } while (!std::regex_match(taskNameU, regex("[a-zA-Z0-9 ]+")));
                 //Update the task
-                TaskStorage->updateData(taskNameU, '1', taskNameU);
+                TaskStorage->updateData(taskNameU, '1', taskNameC);
                 cout << "Task updated successfully!" << endl;
+                system("pause");
                 break;
             case '2':
                 //Change task description
@@ -471,6 +472,7 @@ public:
                 //Update the task
                 TaskStorage->updateData(taskNameU, '2', taskDescription);
                 cout << "Task updated successfully!" << endl;
+                system("pause");
                 break;
             case '3':
                 //Enter task deadline

@@ -279,7 +279,6 @@ public:
 	//Update data
 	void updateData(std::string tname, char type, std::string value) {
 		Node* temp = searchData(tname);
-		std::cout << temp -> name;
 		switch (type) {
 			case '1':
 			temp->name = value;
@@ -288,7 +287,7 @@ public:
 			temp->desc = value;
 			break;
 		}
-		system("pause");
+		
 	}
 
 	//Update data for time
