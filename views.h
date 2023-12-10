@@ -17,6 +17,8 @@ class views
 {
 public:
     LinkedStorage* TaskStorage = new LinkedStorage();
+    timeConverter* time = new timeConverter();
+    
 
     views() {
         
@@ -30,7 +32,8 @@ public:
                 << "2. Add a New Task" << endl
                 << "3. Delete a Task" << endl
                 << "4. Modify a Task" << endl
-                << "5. Exit" << endl << endl
+                << "5. Change time format" << endl
+                << "6. Exit" << endl << endl
                 << "Choose an option: ";
             option = _getch();
 
@@ -54,6 +57,12 @@ public:
                 updateTask();
                 break;
             case '5':
+                //Call modify a task
+                cout << endl;
+                TaskStorage -> changeTimeFormat();
+                system("pause");
+				break;
+            case '6':
                 //Exit the program
                 cout << endl << "Thank you for using our system!" << endl;
                 system("pause");
@@ -93,7 +102,16 @@ public:
 				system("pause");
 				system("cls");
 			}
-		} while (!std::regex_match(taskName, regex("[a-zA-Z0-9 ]+")));
+            //Check if task name already exists
+            else if (TaskStorage->searchData(taskName) != NULL) {
+				cout << "Task name already exists! Please enter a different task name!" << endl;
+				system("pause");
+				system("cls");
+            }
+            else {
+                break;
+            }
+		} while (true);
         
 
         //Enter task description
@@ -103,12 +121,13 @@ public:
         //Enter task deadline
         do {
             cout << "Enter task deadline (24-Hour Format w/o colon e.g 800 for 8:00 AM): ";
-			cin >> taskDeadline;
-            //Error handling
-            while (cin.fail()) {
-                //Set taskDeadline to -1 to trigger the while loop
-                taskDeadline = -1;
-                clearInvalid();
+			string tempInput;
+            getline(cin, tempInput);
+            try {
+                taskDeadline = stoi(tempInput);
+			}
+			catch (exception e) {
+				taskDeadline = -1;
             }
 
 			if (taskDeadline < 0 || taskDeadline > 2400) {
@@ -252,6 +271,7 @@ public:
             }
         }
     }	
+
 
 };
 

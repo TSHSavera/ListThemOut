@@ -17,7 +17,7 @@ class Node {
 public:
 	std::string name;
 	std::string desc;
-	std::time_t time;
+	int time;
 	Node* next = NULL;
 	Node* prev = NULL;
 
@@ -30,12 +30,51 @@ public:
 
 };
 
+static class timeConverter {
+public:
+
+	//Functions
+	std::string TwelveHourFormat(int time) {
+		std::string convertedTime;
+		std::string tempMinute;
+		if (time < 1200) {
+			if (time % 100 <= 9) {
+				tempMinute = "0";
+				tempMinute += toString(time % 100);
+			}
+			else {
+				tempMinute = toString(time % 100);
+			}
+			convertedTime = toString(time / 100);
+			convertedTime += ":";
+			convertedTime += tempMinute;
+			convertedTime += " AM";
+			return convertedTime;
+		}
+		else {
+			if (time % 100 <= 9) {
+				tempMinute = "0";
+				tempMinute += toString(time % 100);
+			}
+			else {
+				tempMinute = toString(time % 100);
+			}
+			convertedTime = toString(time / 100 - 12);
+			convertedTime += ":";
+			convertedTime += tempMinute;
+			convertedTime += " PM";
+			return convertedTime;
+		}
+	}
+};
+
 class LinkedStorage {
 public:
 	Node* head = NULL;
 	Node* tail = NULL;
+	timeConverter tc;
+	bool is24HourFormat = false;
 
-	//Functions
 	//Add data
 	void addNode(std::string name, std::string desc, int time) {
 		Node* newNode = new Node(name, desc, time);
@@ -44,9 +83,30 @@ public:
 			tail = newNode;
 		}
 		else {
-			tail->next = newNode;
-			newNode->prev = tail;
-			tail = newNode;
+			//Compare the time values first before adding - if the time value is lower, it will be added first
+			if (newNode->time < head->time) {
+				newNode->next = head;
+				head->prev = newNode;
+				head = newNode;
+			}
+			else if (newNode->time > tail->time) {
+				newNode->prev = tail;
+				tail->next = newNode;
+				tail = newNode;
+			}
+			else {
+				Node* temp = head;
+				while (temp != NULL) {
+					if (newNode->time < temp->time) {
+						newNode->next = temp;
+						newNode->prev = temp->prev;
+						temp->prev->next = newNode;
+						temp->prev = newNode;
+						break;
+					}
+					temp = temp->next;
+				}
+			}
 		}
 	}
 
@@ -94,7 +154,6 @@ public:
 	Node* searchData(std::string name) {
 		Node* temp = head;
 		if (temp == NULL) {
-			std::cout << "There's no data to search" << std::endl;
 			return NULL;
 		}
 		while (temp != NULL) {
@@ -105,9 +164,19 @@ public:
 		}
 		return NULL;
 	}
+	void changeTimeFormat() {
+		is24HourFormat = !is24HourFormat;
+		if (is24HourFormat) {
+			std::cout << "Time format changed to 24 hour format" << std::endl;
+		}
+		else {
+			std::cout << "Time format changed to 12 hour format" << std::endl;
+		}
+	}
 
 	//Get all data from start to end
 	void getAllData() {
+
 		Node* temp = head;
 		if (temp == NULL) {
 			std::cout << "There's no data to display" << std::endl;
@@ -116,13 +185,19 @@ public:
 		while (temp != NULL) {
 			//Convert time to 24 hour format from military time
 			std::string time = toString(temp->time);
-			if (time.length() == 3) {
-				time.insert(0, "0");
-				//rebuild time with colon
-				time.insert(2, ":");
+			if (is24HourFormat) {
+				if (time.length() == 3) {
+					time.insert(0, "0");
+					//rebuild time with colon
+					time.insert(2, ":");
+				}
+				else {
+					time.insert(2, ":");
+				}
 			}
 			else {
-				time.insert(2, ":");
+				
+				time = tc.TwelveHourFormat(temp->time);
 			}
 			
 			std::cout << std::endl <<
