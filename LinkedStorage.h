@@ -1,11 +1,23 @@
 //BAWAL MAG COUT OR CIN SA CLASS NA TO
+#include <iostream>
+#include <chrono>
+#include <ctime>
+#include <sstream>
 #include <string>
+
+//Template for VS - not working toString
+template<class T>
+std::string toString(const T& value) {
+	std::ostringstream os;
+	os << value;
+	return os.str();
+}
 
 class Node {
 public:
 	std::string name;
 	std::string desc;
-	int time;
+	std::time_t time;
 	Node* next = NULL;
 	Node* prev = NULL;
 
@@ -41,11 +53,17 @@ public:
 	//Delete data
 	void deleteNode(std::string name) {
 		Node* temp = head;
+		if (temp == NULL) {
+			std::cout << "There's no data to delete" << std::endl;
+			return;
+		}
 		while (temp != NULL) {
 			if (temp->name == name) {
 				if (temp == head) {
 					head = temp->next;
-					head->prev = NULL;
+					if (!head == NULL) {
+						head->prev = NULL;
+					}
 					delete temp;
 					break;
 				}
@@ -62,49 +80,85 @@ public:
 					break;
 				}
 			}
-			temp = temp->next;
+			if (temp->next == NULL) {
+				std::cout << "There's no data to delete" << std::endl;
+				break;
+			}
+			else {
+				temp = temp->next;
+			}
 		}
 	}
 
 	//Search Data
 	Node* searchData(std::string name) {
 		Node* temp = head;
+		if (temp == NULL) {
+			std::cout << "There's no data to search" << std::endl;
+			return NULL;
+		}
 		while (temp != NULL) {
 			if (temp->name == name) {
 				return temp;
-				break;
 			}
 			temp = temp->next;
 		}
+		return NULL;
 	}
 
 	//Get all data from start to end
 	void getAllData() {
-		//Return all data from start to end
 		Node* temp = head;
+		if (temp == NULL) {
+			std::cout << "There's no data to display" << std::endl;
+			return;
+		}
+		while (temp != NULL) {
+			//Convert time to 24 hour format from military time
+			std::string time = toString(temp->time);
+			if (time.length() == 3) {
+				time.insert(0, "0");
+				//rebuild time with colon
+				time.insert(2, ":");
+			}
+			else {
+				time.insert(2, ":");
+			}
+			
+			std::cout << std::endl <<
+				"Task Name: " << temp->name << std::endl <<
+				"Task Description:" << std::endl << temp->desc <<
+				std::endl << "Task Deadline: " << time << std::endl;
+			temp = temp->next;
+		}
 
 	}
 
 	//Update data
-	void updateData(char type, std::string desc) {
-		Node* temp = head;
+	void updateData(std::string tname, char type, std::string value) {
+		Node* temp = searchData(tname);
+		std::cout << temp -> name;
 		switch (type) {
 			case '1':
-			temp->name = desc;
+			temp->name = value;
 			break;
 			case '2':
-			temp->desc = desc;
+			temp->desc = value;
 			break;
 		}
+		system("pause");
 	}
 
-	void updateData(char type, int time) {
-		Node* temp = head;
+	//Update data for time
+	void updateData(std::string tname,char type, int time) {
+		Node* temp = searchData(tname);
+		std::cout << temp -> name;
 		switch (type) {
 			case '3':
 			temp->time = time;
 			break;
 		}
+		system("pause");
 	}
 
 };
